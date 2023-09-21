@@ -1,78 +1,72 @@
 package com.example.smartparkingclient.view;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.smartparkingclient.R;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.View;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import com.example.smartparkingclient.R;
+import com.example.smartparkingclient.api.models.User;
+import com.example.smartparkingclient.api.utils.UserDataService;
+import com.example.smartparkingclient.view.adapters.PagesAdapter;
 
-import com.example.smartparkingclient.databinding.ActivityMainBinding;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class MainActivity extends AppCompatActivity implements TabLayoutMediator.TabConfigurationStrategy {
+    ViewPager2 viewPager;
+    TabLayout tabLayout;
+    ArrayList<String> names = new ArrayList<>(Arrays.asList("Profile", "Parking", "Booking"));
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        var userDataService = UserDataService.getInstance(MainActivity.this);
+        user = userDataService.getUser();
+        if (user == null) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
 
-        setSupportActionBar(binding.toolbar);
+        viewPager = findViewById(R.id.pager);
+        tabLayout = findViewById(R.id.tab_layout);
+        setViewPageAdapter();
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+        FloatingActionButton fab = findViewById(R.id.new_booking);
+        fab.setOnClickListener(v -> {
+            var intent = new Intent(MainActivity.this, CreateEditActivity.class);
+            startActivity(intent);
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    void setViewPageAdapter() {
+        PagesAdapter adapter = new PagesAdapter(this);
+        ArrayList<Fragment> fragments = new ArrayList<>();
+
+        fragments.add(new UserFragment(user));
+        fragments.add(new ParkingsFragment());
+        fragments.add(new BookingsFragment());
+        adapter.setFragments(fragments);
+        viewPager.setAdapter(adapter);
+        new TabLayoutMediator(tabLayout, viewPager, this).attach();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+        tab.setText(names.get(position));
     }
 }

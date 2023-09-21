@@ -1,0 +1,133 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Date picker -->
+        <TextView
+            android:id="@+id/date_label"
+            android:text="@string/select_date"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="16dp" />
+
+        <DatePicker
+            android:id="@+id/date_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/date_label"
+            android:layout_marginTop="8dp"
+            android:calendarViewShown="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+
+        <TextView
+            android:id="@+id/tv_start_time_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_start_time"
+            android:textSize="16sp"
+            android:layout_below="@id/date_picker"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"/>
+
+        <TimePicker
+            android:id="@+id/time_picker_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_start_time_label"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:timePickerMode="spinner"
+            android:layout_marginEnd="16dp"/>
+
+        <TextView
+            android:id="@+id/tv_end_time_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_end_time"
+            android:textSize="16sp"
+            android:layout_below="@id/time_picker_start"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"/>
+
+        <TimePicker
+            android:id="@+id/time_picker_end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_end_time_label"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:timePickerMode="spinner"
+            android:layout_marginEnd="16dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/time_picker_end">
+
+            <!-- Parking dropdown -->
+            <TextView
+                android:id="@+id/parking_label"
+                android:text="@string/select_parking"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="16dp" />
+
+            <Spinner
+                android:id="@+id/parking_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/parking_label"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp" />
+
+            <!-- Parking place dropdown -->
+            <TextView
+                android:id="@+id/parking_place_label"
+                android:text="@string/select_parking_place"
+                android:textStyle="bold"
+                android:layout_below="@id/parking_spinner"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="16dp" />
+
+            <Spinner
+                android:id="@+id/parking_place_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/parking_place_label"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp" />
+
+            <Button
+                android:id="@+id/booking_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/parking_place_spinner"
+                android:layout_marginTop="16dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:layout_centerHorizontal="true"
+                android:enabled="false"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

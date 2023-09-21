@@ -1,8 +1,10 @@
 package com.example.smartparkingclient.api.client;
 
-import android.content.Context;
-
 import com.example.smartparkingclient.api.utils.UserDataService;
+import com.google.gson.GsonBuilder;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -18,9 +20,13 @@ public class ApiClient {
             OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
             httpClient.addInterceptor(new AuthInterceptor(userData));
 
+            var parser = new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                    .create();
+
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(parser))
                     .client(httpClient.build())
                     .build();
         }

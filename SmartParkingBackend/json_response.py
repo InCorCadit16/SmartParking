@@ -4,6 +4,7 @@ import flask
 import pydantic as p
 import numpy as np
 import pandas as pd
+from datetime import datetime
 
 
 class JsonEncoder(json.JSONEncoder):
@@ -18,6 +19,8 @@ class JsonEncoder(json.JSONEncoder):
             return int(obj)
         if isinstance(obj, np.floating):
             return float(obj)
+        if isinstance(obj, datetime):
+            return obj.isoformat()
         # if isinstance(obj, np.ndarray):
         #     return obj.tolist()
         # if isinstance(obj, float) and np.isnan(obj):

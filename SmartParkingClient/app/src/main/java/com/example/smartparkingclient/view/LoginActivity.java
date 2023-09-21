@@ -6,8 +6,8 @@ import android.os.Bundle;
 import com.example.smartparkingclient.R;
 import com.example.smartparkingclient.api.client.ApiClient;
 import com.example.smartparkingclient.api.client.ApiService;
-import com.example.smartparkingclient.api.models.LoginRequest;
-import com.example.smartparkingclient.api.models.LoginResponse;
+import com.example.smartparkingclient.api.contracts.LoginRequest;
+import com.example.smartparkingclient.api.contracts.LoginResponse;
 import com.example.smartparkingclient.api.utils.UserDataService;
 
 import androidx.annotation.NonNull;
@@ -44,6 +44,9 @@ public class LoginActivity extends AppCompatActivity {
         passwordField = findViewById(R.id.password_edittext);
         Button loginButton = findViewById(R.id.login_button);
 
+        if (userDataService.isLoggedIn())
+            goToMainPage();
+
         loginButton.setOnClickListener(view -> {
             var username = usernameField.getText().toString();
             var password = passwordField.getText().toString();
@@ -60,11 +63,8 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        UserDataService.initialize();
                         userDataService.setToken(response.body().token);
-
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
+                        goToMainPage();
                     }
                 }
 
@@ -74,5 +74,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    private void goToMainPage() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }
